@@ -52,7 +52,7 @@ class _DetailsscreenState extends State<Detailsscreen> {
               Container(
                 height: 280.h,
                 width: double.infinity,
-                child: widget.image!=''?Image.network(widget.image,):SizedBox(),
+                child: widget.image!=''?Image.network(widget.image,):Image.asset('assets/images/img13.png',fit: BoxFit.cover,),
 
                 
                 // child:Center(child: FlickVideoPlayer(
