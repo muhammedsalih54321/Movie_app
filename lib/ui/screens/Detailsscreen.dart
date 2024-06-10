@@ -1,33 +1,46 @@
-import 'package:flick_video_player/flick_video_player.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:video_player/video_player.dart';
+import 'package:movie_app/Repository/ModelClass/moviemodel.dart';
+
 
 class Detailsscreen extends StatefulWidget {
-  const Detailsscreen({super.key});
+  final String title;
+  final String image;
+  final String description; 
+  // final String cast;
+  // final String genre;
+  final MovieModel model;
+  final int index;
+
+  const Detailsscreen({super.key,required this.title, required this.image, required this.description,required this.model, required this.index});
 
   @override
   State<Detailsscreen> createState() => _DetailsscreenState();
 }
 
 class _DetailsscreenState extends State<Detailsscreen> {
+  //   List genere = [
+  //   'ACTION', 'ADVENTURE', 'FANTASY'
+    
+  // ];
 
-  List img = [
-    'assets/images/img6.png',
-    'assets/images/img7.png',
-    'assets/images/img8.png',
-    'assets/images/img9.png',
-  ];
-  List name = ['Tom\nHolland', 'Zendaya', 'Benedict\nCumberbat','Jacon\nBatalon'];
-  late FlickManager flickManager;
+  // List img = [
+  //   'assets/images/img6.png',
+  //   'assets/images/img7.png',
+  //   'assets/images/img8.png',
+  //   'assets/images/img9.png',
+  // ];
+  // List name = ['Tom\nHolland', 'Zendaya', 'Benedict\nCumberbat','Jacon\nBatalon'];
+  // late FlickManager flickManager;
   @override
   
-  void initState() {
+  // void initState() {
    
-    super.initState();
-    flickManager = FlickManager(videoPlayerController: VideoPlayerController.networkUrl(Uri.parse( 'https://www.taxmann.com/emailer/images/CompaniesAct.mp4')));
-  }
+  //   super.initState();
+  //   flickManager = FlickManager(videoPlayerController: VideoPlayerController.networkUrl(Uri.parse( 'https://www.taxmann.com/emailer/images/CompaniesAct.mp4')));
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -39,9 +52,12 @@ class _DetailsscreenState extends State<Detailsscreen> {
               Container(
                 height: 280.h,
                 width: double.infinity,
-                child:Center(child: FlickVideoPlayer(
+                child: widget.image!=''?Image.network(widget.image,):SizedBox(),
+
+                
+                // child:Center(child: FlickVideoPlayer(
                   
-                  flickManager: flickManager),)
+                //   flickManager: flickManager),)
               ),
               AppBar(
                 backgroundColor: Colors.transparent,
@@ -73,7 +89,7 @@ class _DetailsscreenState extends State<Detailsscreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Spiderman: No Way\nHome',
+                      Text(widget.title,
                           style: GoogleFonts.mulish(
                               color: Colors.black,
                               fontSize: 20.sp,
@@ -106,44 +122,29 @@ class _DetailsscreenState extends State<Detailsscreen> {
                   SizedBox(
                     height: 10.h,
                   ),
-                  Row(
-                    children: [
-                      Container(
-                        height: 20.h,
-                        width: 60.w,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10.r),
-                            color: Color.fromARGB(68, 39, 89, 176)),
-                      child:Center(child:Text('ACTION',
-                          style: GoogleFonts.mulish(
-                              color: Colors.blueAccent,
-                              fontSize: 8.sp,
-                              fontWeight: FontWeight.w700)) ,),
-                      ),SizedBox(width: 5.w,),  Container(
-                        height: 20.h,
-                        width: 70.w,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10.r),
-                            color: Color.fromARGB(68, 39, 89, 176)),
-                      child:Center(child:Text('ADVENTURES',
-                          style: GoogleFonts.mulish(
-                              color: Colors.blueAccent,
-                              fontSize: 8.sp,
-                              fontWeight: FontWeight.w700)) ,),
-                      ),SizedBox(width: 5.w,),  Container(
-                        height: 20.h,
-                        width: 70.w,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10.r),
-                            color: Color.fromARGB(68, 39, 89, 176)),
-                      child:Center(child:Text('FANTASY',
-                          style: GoogleFonts.mulish(
-                              color: Colors.blueAccent,
-                              fontSize: 8.sp,
-                              fontWeight: FontWeight.w700)) ,),
-                      )
-                    ],
-                  ),
+                 Container(height: 20.h,width: 300.w
+                              ,child:ListView.builder(
+                                itemCount: widget.model.titles![widget.index].jawSummary!.genres!.length,
+                                scrollDirection: Axis.horizontal,
+                                itemBuilder: (context, index) {
+                                  print("hello"+widget.model.titles!.length.toString());
+                                  return   Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 3),
+                                    child: Container(
+                                    height: 20.h,
+                                    width: 80.w,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10.r),
+                                        color: Color.fromARGB(68, 39, 89, 176)),
+                                                                    child:Center(child:Text(widget.model.titles![widget.index].jawSummary!.genres![index].name.toString(),
+                                      style: GoogleFonts.mulish(
+                                          color: Colors.blueAccent,
+                                          fontSize: 8.sp,
+                                          fontWeight: FontWeight.w700)) ,),
+                                                                    ),
+                                  );
+                                },),
+                              ),
                   SizedBox(height: 15.h,),
                   Row(children: [
                     Column(children: [Text('Length',
@@ -189,7 +190,7 @@ class _DetailsscreenState extends State<Detailsscreen> {
                               fontSize: 16.sp,
                               fontWeight: FontWeight.w900)),
                               SizedBox(height: 10.h,),
-                               Text('With Spider-Man\'s identity now revealed, Peter asks Doctor Strange for help. When a spell goes wrong, dangerous foes from other worlds start to appear, forcing Peter to discover what it truly means to be Spider-Man.',
+                               Text(widget.description,
                           style: GoogleFonts.mulish(
                               color: Colors.grey,
                               fontSize: 12.sp,
@@ -227,7 +228,7 @@ class _DetailsscreenState extends State<Detailsscreen> {
               child: Container(
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: img.length,
+                  itemCount: widget.model.titles![widget.index].jawSummary!.cast!.length,
                   itemBuilder: (context, index) {
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 3),
@@ -239,7 +240,7 @@ class _DetailsscreenState extends State<Detailsscreen> {
                               elevation: 2,
                               shadowColor: Colors.black,
                               child: GestureDetector(
-                                onTap:() =>index==0? Navigator.push(context,MaterialPageRoute(builder: (_)=>Detailsscreen())):null,
+                              
                                 child: Container(
                                   height: 80.h,
                                   width: 90.w,
@@ -248,10 +249,8 @@ class _DetailsscreenState extends State<Detailsscreen> {
                                   ),
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(10),
-                                    child: Image.asset(
-                                      img[index],
-                                      fit: BoxFit.cover,
-                                    ),
+                                    child: SizedBox(),
+                                    
                                   ),
                                 ),
                               ),
@@ -264,12 +263,16 @@ class _DetailsscreenState extends State<Detailsscreen> {
                                   const EdgeInsets.symmetric(horizontal: 10),
                               child: Row(
                                 children: [
-                                  Text(name[index],
-                                      style: GoogleFonts.mulish(
-                                          color: Colors.black,
-                                          fontSize: 12.sp,
-                                          fontWeight: FontWeight.w400)),
-                                ],
+                                  SizedBox(
+                                    height: 20.h,
+                                    width: 70.w,
+                                    child: Text(widget.model.titles![widget.index].jawSummary!.cast![index].name.toString(),
+                                        style: GoogleFonts.mulish(
+                                            color: Colors.black,
+                                            fontSize: 12.sp,
+                                            fontWeight: FontWeight.w400)),
+                                  ),
+                              ],
                               ),
                             ),
                             
